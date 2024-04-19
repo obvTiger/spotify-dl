@@ -4,18 +4,14 @@ on:
   push:
     tags:
       - "v*"
-
-
   workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-
   build:
     runs-on: ${{ matrix.platform }}
-    needs: create_release
     strategy:
       fail-fast: false
       matrix:
