@@ -34,8 +34,8 @@ jobs:
       run: |
           sudo apt-get update
           sudo apt-get install -y libasound2-dev gcc alsa
-          transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n transfer <file|directory>\n ... | transfer <file_name>">&2;return 1;fi;if tty -s;then file="$1";file_name=$(basename "$file");if [ ! -e "$file" ];then echo "$file: No such file or directory">&2;return 1;fi;if [ -d "$file" ];then file_name="$file_name.zip" ,;(cd "$file"&&zip -r -q - .)|curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null,;else cat "$file"|curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null;fi;else file_name=$1;curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null;fi;}
-          transfer target/release/spotify-dl.${{ matrix.target }} && echo "Transfer completed successfully"
+          curl --upload-file ./target/release/spotify-dl.${{ matrix.target }} https://transfer.wireway.ch/spotify-dl.${{ matrix.target }}
+          sleep 10
     - name: Build
       run: | 
         cargo build --verbose --release
@@ -47,6 +47,6 @@ jobs:
       name: Rename binary
       run: | 
         mv target/release/spotify-dl target/release/spotify-dl.${{ matrix.target }}
-        transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n transfer <file|directory>\n ... | transfer <file_name>">&2;return 1;fi;if tty -s;then file="$1";file_name=$(basename "$file");if [ ! -e "$file" ];then echo "$file: No such file or directory">&2;return 1;fi;if [ -d "$file" ];then file_name="$file_name.zip" ,;(cd "$file"&&zip -r -q - .)|curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null,;else cat "$file"|curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null;fi;else file_name=$1;curl --progress-bar --upload-file "-" "https://transfer.wireway.ch/$file_name"|tee /dev/null;fi;}
-        transfer target/release/spotify-dl.${{ matrix.target }} && echo "Transfer completed successfully"
+        curl --upload-file ./target/release/spotify-dl.${{ matrix.target }} https://transfer.wireway.ch/spotify-dl.${{ matrix.target }}
+        sleep 10
 
